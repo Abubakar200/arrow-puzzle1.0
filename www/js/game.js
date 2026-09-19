@@ -59,13 +59,22 @@ function renderBoard() {
 
 // CREATE ARROW
 function createArrow(cell, arrowData) {
-  const arrow = document.createElement("div");
-  arrow.className = `board-arrow ${arrowData.direction}`;
-  arrow.dataset.arrowId = arrowData.id;
-  arrow.addEventListener("click", () => {
-    moveArrow(arrowData.id);
-  });
-  cell.appendChild(arrow);
+    const arrow = document.createElement("div");
+
+    arrow.className = "board-arrow";
+    arrow.dataset.arrowId = arrowData.id;
+
+    const visual = document.createElement("div");
+
+    visual.className = `arrow-visual ${arrowData.direction}`;
+
+    arrow.appendChild(visual);
+
+    arrow.addEventListener("click", () => {
+        moveArrow(arrowData.id);
+    });
+
+    cell.appendChild(arrow);
 }
 // MOVE ARROW
 
@@ -173,33 +182,47 @@ function animateArrowExit(arrow) {
     return;
   }
 
-  // Get positions relative to the viewport
-  const elementRect = element.getBoundingClientRect();
+  const cell = element.closest(".puzzle-cell");
+
+  if (!cell) {
+    return;
+  }
+
+  const cellRect = cell.getBoundingClientRect();
   const boardRect = board.getBoundingClientRect();
 
-  // Current center of the arrow
-  const arrowCenterX = elementRect.left + elementRect.width / 2;
+  /*
+   * Distance is calculated from the arrow's
+   * current cell to the COMPLETE board edge.
+   */
 
-  const arrowCenterY = elementRect.top + elementRect.height / 2;
-
-  // Distance from arrow center to the board edge
   let distance = 0;
 
   switch (arrow.direction) {
     case "up":
-      distance = arrowCenterY - boardRect.top + elementRect.height;
+      distance =
+        cellRect.top -
+        boardRect.top +
+        cellRect.height;
       break;
 
     case "down":
-      distance = boardRect.bottom - arrowCenterY + elementRect.height;
+      distance =
+        boardRect.bottom -
+        cellRect.top;
       break;
 
     case "left":
-      distance = arrowCenterX - boardRect.left + elementRect.width;
+      distance =
+        cellRect.left -
+        boardRect.left +
+        cellRect.width;
       break;
 
     case "right":
-      distance = boardRect.right - arrowCenterX + elementRect.width;
+      distance =
+        boardRect.right -
+        cellRect.left;
       break;
   }
 
@@ -224,29 +247,39 @@ function animateArrowExit(arrow) {
       break;
   }
 
-  // Keep the arrow pointing in its original direction
-  const rotation = {
-    up: 0,
-    right: 90,
-    down: 180,
-    left: 270,
-  };
+  /*
+   * Move the ENTIRE arrow across the
+   * puzzle board.
+   */
 
   element.style.transition =
     "transform 0.65s cubic-bezier(0.22, 0.61, 0.36, 1)";
 
-  element.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${rotation[arrow.direction]}deg)`;
+  element.style.transform =
+    `translate3d(${x}px, ${y}px, 0)`;
 
   element.style.pointerEvents = "none";
 
+  /*
+   * Remove arrow after animation.
+   */
+
   setTimeout(() => {
-    currentGame.arrows = currentGame.arrows.filter(
-      (item) => item.id !== arrow.id,
-    );
+    if (!currentGame) {
+      return;
+    }
+
+    currentGame.arrows =
+      currentGame.arrows.filter(
+        (item) => item.id !== arrow.id,
+      );
 
     updateArrowCounter();
+
     renderBoard();
+
     checkLevelComplete();
+
   }, 650);
 }
 // SHAKE BLOCKED ARROW

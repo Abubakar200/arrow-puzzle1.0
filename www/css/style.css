@@ -1,3 +1,7 @@
+/* =========================================================
+   RESET
+========================================================= */
+
 * {
     margin: 0;
     padding: 0;
@@ -18,9 +22,9 @@ body {
 }
 
 
-/* =========================
+/* =========================================================
    COMMON SCREEN
-========================= */
+========================================================= */
 
 .screen {
     position: fixed;
@@ -30,7 +34,6 @@ body {
     height: 100%;
 
     display: none;
-
     overflow: hidden;
 }
 
@@ -39,16 +42,18 @@ body {
 }
 
 
-/* =========================
+/* =========================================================
    SPLASH SCREEN
-========================= */
+========================================================= */
 
 #splash-screen {
     background:
-        radial-gradient(circle at center,
+        radial-gradient(
+            circle at center,
             #29324a 0%,
             #171c2a 45%,
-            #0d1018 100%);
+            #0d1018 100%
+        );
 
     justify-content: center;
     align-items: center;
@@ -66,13 +71,12 @@ body {
 }
 
 
-/* =========================
+/* =========================================================
    LOGO
-========================= */
+========================================================= */
 
 .game-logo {
     text-align: center;
-
     margin-bottom: 80px;
 
     animation: logoAppear 0.8s ease-out;
@@ -91,7 +95,6 @@ body {
     border-radius: 25px;
 
     background: #ffffff;
-
     color: #171c2a;
 
     font-size: 58px;
@@ -109,7 +112,6 @@ body {
     line-height: 36px;
 
     letter-spacing: 5px;
-
     font-weight: 900;
 }
 
@@ -118,20 +120,18 @@ body {
     font-size: 22px;
 
     letter-spacing: 9px;
-
     margin-left: 9px;
 
     color: #8fa4c7;
 }
 
 
-/* =========================
+/* =========================================================
    LOADING BAR
-========================= */
+========================================================= */
 
 .loading-container {
     width: 100%;
-
     text-align: center;
 }
 
@@ -140,7 +140,6 @@ body {
     height: 10px;
 
     overflow: hidden;
-
     border-radius: 20px;
 
     background: rgba(255, 255, 255, 0.12);
@@ -171,9 +170,9 @@ body {
 }
 
 
-/* =========================
+/* =========================================================
    VERSION
-========================= */
+========================================================= */
 
 .version {
     position: absolute;
@@ -193,16 +192,18 @@ body {
 }
 
 
-/* =========================
+/* =========================================================
    HOME SCREEN
-========================= */
+========================================================= */
 
 #home-screen {
     background:
-        radial-gradient(circle at 50% 35%,
+        radial-gradient(
+            circle at 50% 35%,
             #303b58 0%,
             #171c2a 45%,
-            #0d1018 100%);
+            #0d1018 100%
+        );
 
     justify-content: center;
     align-items: center;
@@ -220,9 +221,9 @@ body {
 }
 
 
-/* =========================
+/* =========================================================
    HOME LOGO
-========================= */
+========================================================= */
 
 .home-logo {
     text-align: center;
@@ -243,7 +244,6 @@ body {
     justify-content: center;
 
     background: white;
-
     color: #171c2a;
 
     border-radius: 22px;
@@ -257,9 +257,9 @@ body {
 }
 
 
-/* =========================
-   MENU
-========================= */
+/* =========================================================
+   HOME MENU
+========================================================= */
 
 .home-menu {
     width: 100%;
@@ -272,11 +272,9 @@ body {
 
 .menu-button {
     width: 100%;
-
     height: 62px;
 
     border: none;
-
     border-radius: 18px;
 
     background: rgba(255, 255, 255, 0.10);
@@ -284,7 +282,6 @@ body {
     color: white;
 
     font-size: 17px;
-
     font-weight: bold;
 
     letter-spacing: 2px;
@@ -316,7 +313,6 @@ body {
 
 .play-button {
     background: white;
-
     color: #171c2a;
 
     font-size: 19px;
@@ -330,9 +326,9 @@ body {
 }
 
 
-/* =========================
-   FOOTER
-========================= */
+/* =========================================================
+   HOME FOOTER
+========================================================= */
 
 .home-footer {
     margin-top: 45px;
@@ -345,12 +341,11 @@ body {
 }
 
 
-/* =========================
-   ANIMATIONS
-========================= */
+/* =========================================================
+   GENERAL ANIMATIONS
+========================================================= */
 
 @keyframes logoAppear {
-
     from {
         opacity: 0;
         transform: translateY(20px) scale(0.9);
@@ -360,11 +355,9 @@ body {
         opacity: 1;
         transform: translateY(0) scale(1);
     }
-
 }
 
 @keyframes homeLogoAppear {
-
     from {
         opacity: 0;
         transform: scale(0.85);
@@ -374,13 +367,12 @@ body {
         opacity: 1;
         transform: scale(1);
     }
-
 }
 
 
-/* =========================
-   MOBILE
-========================= */
+/* =========================================================
+   MOBILE HEIGHT
+========================================================= */
 
 @media (max-height: 600px) {
 
@@ -409,19 +401,21 @@ body {
     .home-logo h2 {
         font-size: 17px;
     }
-
 }
 
-/* =========================
+
+/* =========================================================
    LEVEL SELECTION SCREEN
-========================= */
+========================================================= */
 
 #level-screen {
     background:
-        radial-gradient(circle at 50% 20%,
+        radial-gradient(
+            circle at 50% 20%,
             #303b58 0%,
             #171c2a 45%,
-            #0d1018 100%);
+            #0d1018 100%
+        );
 
     color: white;
 
@@ -430,9 +424,9 @@ body {
 }
 
 
-/* =========================
-   CONTAINER
-========================= */
+/* =========================================================
+   LEVEL CONTAINER
+========================================================= */
 
 .level-container {
     width: min(92%, 430px);
@@ -446,9 +440,9 @@ body {
 }
 
 
-/* =========================
-   HEADER
-========================= */
+/* =========================================================
+   LEVEL HEADER
+========================================================= */
 
 .level-header {
     width: 100%;
@@ -475,9 +469,9 @@ body {
 }
 
 
-/* =========================
+/* =========================================================
    BACK BUTTON
-========================= */
+========================================================= */
 
 .back-button {
     width: 44px;
@@ -509,9 +503,9 @@ body {
 }
 
 
-/* =========================
-   PROGRESS
-========================= */
+/* =========================================================
+   LEVEL PROGRESS
+========================================================= */
 
 .level-progress {
     width: 100%;
@@ -553,7 +547,6 @@ body {
 
 .progress-fill {
     width: 2%;
-
     height: 100%;
 
     border-radius: inherit;
@@ -564,9 +557,9 @@ body {
 }
 
 
-/* =========================
+/* =========================================================
    LEVEL GRID
-========================= */
+========================================================= */
 
 .levels-grid {
     flex: 1;
@@ -589,9 +582,9 @@ body {
 }
 
 
-/* =========================
+/* =========================================================
    LEVEL BUTTON
-========================= */
+========================================================= */
 
 .level-button {
     aspect-ratio: 1 / 1;
@@ -626,9 +619,6 @@ body {
         background 0.15s ease;
 }
 
-
-/* Unlocked */
-
 .level-button.unlocked {
     background: rgba(255, 255, 255, 0.14);
 }
@@ -641,17 +631,11 @@ body {
     transform: scale(0.92);
 }
 
-
-/* Level Number */
-
 .level-number {
     font-size: 22px;
 
     line-height: 1;
 }
-
-
-/* Small LEVEL text */
 
 .level-label {
     margin-top: 5px;
@@ -664,9 +648,9 @@ body {
 }
 
 
-/* =========================
+/* =========================================================
    LOCKED LEVEL
-========================= */
+========================================================= */
 
 .level-button.locked {
     opacity: 0.45;
@@ -687,9 +671,9 @@ body {
 }
 
 
-/* =========================
+/* =========================================================
    COMPLETED LEVEL
-========================= */
+========================================================= */
 
 .level-button.completed {
     background: rgba(255, 255, 255, 0.20);
@@ -705,9 +689,9 @@ body {
 }
 
 
-/* =========================
-   SMALL PHONES
-========================= */
+/* =========================================================
+   LEVEL RESPONSIVE
+========================================================= */
 
 @media (max-width: 340px) {
 
@@ -716,68 +700,104 @@ body {
 
         gap: 12px;
     }
-
 }
-
-
-/* =========================
-   LARGE PHONES
-========================= */
 
 @media (min-width: 500px) {
 
     .levels-grid {
         grid-template-columns: repeat(5, 1fr);
     }
-
 }
 
-/* ========================= GA ME SCREEN ========================= */
+
+/* =========================================================
+   GAME SCREEN
+========================================================= */
+
 #game-screen {
-    background: radial-gradient(circle at 50% 35%, #303b58 0%, #171c2a 48%, #0d1018 100%);
+    background:
+        radial-gradient(
+            circle at 50% 35%,
+            #303b58 0%,
+            #171c2a 48%,
+            #0d1018 100%
+        );
+
     color: white;
+
     justify-content: center;
     align-items: center;
 }
 
+
+/* =========================================================
+   GAME CONTAINER
+========================================================= */
+
 .game-container {
     width: 100%;
     height: 100%;
+
     max-width: 600px;
+
     display: flex;
     flex-direction: column;
+
     overflow: hidden;
 }
 
-/* ========================= TOP SECTION ========================= */
+
+/* =========================================================
+   GAME TOP
+========================================================= */
+
 .game-top {
     width: 100%;
+
     flex-shrink: 0;
+
     padding: 15px 18px 0;
 }
 
-/* ========================= GAME HEADER ========================= */
+
+/* =========================================================
+   GAME HEADER
+========================================================= */
+
 .game-header {
     width: 100%;
     height: 55px;
+
     display: grid;
+
     grid-template-columns: 50px 1fr 50px;
+
     align-items: center;
 }
 
 .game-icon-button {
     width: 44px;
     height: 44px;
+
     border: none;
+
     border-radius: 14px;
+
     background: rgba(255, 255, 255, 0.10);
+
     color: white;
+
     font-size: 24px;
+
     display: flex;
     align-items: center;
     justify-content: center;
+
     cursor: pointer;
-    transition: transform 0.15s ease, background 0.15s ease;
+
+    transition:
+        transform 0.15s ease,
+        background 0.15s ease;
 }
 
 .game-icon-button:hover {
@@ -788,74 +808,128 @@ body {
     transform: scale(0.90);
 }
 
-/* Level */
+
+/* =========================================================
+   CURRENT LEVEL
+========================================================= */
+
 .current-level {
     text-align: center;
+
     font-size: 17px;
+
     font-weight: 800;
+
     letter-spacing: 2px;
 }
 
-/* ========================= GAME INFORMATION ========================= */
+
+/* =========================================================
+   GAME INFORMATION
+========================================================= */
+
 .game-info {
     width: 100%;
+
     min-height: 75px;
+
     display: grid;
+
     grid-template-columns: 1fr 1fr 1fr;
+
     align-items: center;
+
     margin-top: 8px;
+
     padding: 10px 5px;
+
     border-radius: 18px;
+
     background: rgba(255, 255, 255, 0.06);
 }
 
-/* Info blocks */
 .complexity-info,
 .arrow-counter,
 .lives-info {
     display: flex;
+
     flex-direction: column;
+
     align-items: center;
+
     justify-content: center;
+
     min-width: 0;
 }
 
-/* ========================= INFO LABEL ========================= */
+
+/* =========================================================
+   INFO LABEL
+========================================================= */
+
 .info-label {
     font-size: 9px;
+
     letter-spacing: 1.5px;
+
     color: #8995aa;
+
     font-weight: 700;
 }
 
-/* ========================= COMPLEXITY ========================= */
+
+/* =========================================================
+   COMPLEXITY
+========================================================= */
+
 .complexity-stars {
     margin-top: 5px;
+
     font-size: 15px;
+
     letter-spacing: 2px;
+
     color: #ffffff;
 }
 
-/* ========================= ARROW COUNTER ========================= */
+
+/* =========================================================
+   ARROW COUNTER
+========================================================= */
+
 .arrow-count-number {
     font-size: 23px;
+
     line-height: 25px;
+
     font-weight: 800;
+
     margin-bottom: 2px;
 }
 
-/* ========================= LIVES ========================= */
+
+/* =========================================================
+   LIVES
+========================================================= */
+
 .lives-container {
     display: flex;
+
     gap: 5px;
+
     margin-top: 4px;
 }
 
 .heart {
     font-size: 20px;
+
     line-height: 20px;
+
     color: rgba(255, 255, 255, 0.18);
-    transition: transform 0.2s ease, color 0.2s ease;
+
+    transition:
+        transform 0.2s ease,
+        color 0.2s ease;
 }
 
 .heart.active {
@@ -864,145 +938,14 @@ body {
 
 .heart.lost {
     color: rgba(255, 255, 255, 0.12);
+
     transform: scale(0.85);
 }
 
-/* ========================= PUZZLE AREA ========================= */
-.puzzle-area {
-    flex: 1;
-    position: relative;
-    min-height: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-}
 
-/* ========================= PUZZLE PLACEHOLDER ========================= */
-.puzzle-placeholder {
-    width: 90%;
-    max-width: 420px;
-    aspect-ratio: 1 / 1;
-    border-radius: 25px;
-    border: 2px dashed rgba(255, 255, 255, 0.08);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: rgba(255, 255, 255, 0.12);
-    font-size: 11px;
-    letter-spacing: 3px;
-    user-select: none;
-}
-
-/* ========================= BOTTOM SECTION ========================= */
-.game-bottom {
-    width: 100%;
-    flex-shrink: 0;
-    min-height: 90px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 35px;
-    padding: 10px 20px 20px;
-}
-
-/* ========================= BOTTOM BUTTONS ========================= */
-.bottom-game-button {
-    width: 70px;
-    height: 70px;
-    border: none;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.08);
-    color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: transform 0.15s ease, background 0.15s ease;
-}
-
-.bottom-game-button:hover {
-    background: rgba(255, 255, 255, 0.14);
-}
-
-.bottom-game-button:active {
-    transform: scale(0.90);
-}
-
-/* Icons */
-.bottom-icon {
-    font-size: 25px;
-    line-height: 27px;
-    margin-bottom: 3px;
-}
-
-/* Labels */
-.bottom-label {
-    font-size: 7px;
-    letter-spacing: 1px;
-    color: #8995aa;
-    font-weight: bold;
-}
-
-/* ========================= SMALL PHONES ========================= */
-@media (max-height: 650px) {
-    .game-top {
-        padding-top: 8px;
-    }
-
-    .game-header {
-        height: 48px;
-    }
-
-    .game-icon-button {
-        width: 38px;
-        height: 38px;
-        font-size: 20px;
-    }
-
-    .game-info {
-        min-height: 65px;
-    }
-
-    .game-bottom {
-        min-height: 75px;
-        padding-bottom: 10px;
-    }
-
-    .bottom-game-button {
-        width: 60px;
-        height: 60px;
-    }
-}
-
-/* ========================= VERY SMALL PHONES ========================= */
-@media (max-width: 340px) {
-    .game-top {
-        padding-left: 12px;
-        padding-right: 12px;
-    }
-
-    .game-info {
-        padding-left: 0;
-        padding-right: 0;
-    }
-
-    .complexity-stars {
-        font-size: 13px;
-    }
-
-    .heart {
-        font-size: 17px;
-    }
-}
-
-
-
-
-/* =========================
-   PUZZLE BOARD
-========================= */
+/* =========================================================
+   PUZZLE AREA
+========================================================= */
 
 .puzzle-area {
     flex: 1;
@@ -1014,14 +957,18 @@ body {
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 
     padding: 8px;
 }
 
 
-.puzzle-board {
+/* =========================================================
+   PUZZLE BOARD
+========================================================= */
 
+.puzzle-board {
     width: min(94vw, 430px);
 
     aspect-ratio: 1 / 1;
@@ -1029,11 +976,8 @@ body {
     display: grid;
 
     grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(5, 1fr);
 
-    /*
-       Almost no gap between arrows
-    */
+    grid-template-rows: repeat(5, 1fr);
 
     gap: 0;
 
@@ -1046,22 +990,26 @@ body {
     box-shadow: none;
 
     /*
-       IMPORTANT:
-       arrows cannot visually escape
-       the board.
+       VERY IMPORTANT:
+
+       The entire puzzle board is the
+       animation viewport.
+
+       Arrows may move through cells,
+       but cannot escape the board.
     */
 
     overflow: hidden;
 
+    position: relative;
 }
 
 
-/* =========================
-   BOARD CELL
-========================= */
+/* =========================================================
+   PUZZLE CELL
+========================================================= */
 
 .puzzle-cell {
-
     position: relative;
 
     width: 100%;
@@ -1074,19 +1022,25 @@ body {
     align-items: center;
     justify-content: center;
 
-    overflow: hidden;
+    /*
+       DO NOT hide overflow here.
 
+       This allows the arrow to travel
+       across multiple cells.
+
+       The puzzle-board handles clipping.
+    */
+
+    overflow: visible;
 }
 
 
-/* =========================
-   LONG SIMPLE ARROW
-========================= */
+/* =========================================================
+   ARROW CONTAINER
+========================================================= */
 
 .board-arrow {
-
     width: 100%;
-
     height: 100%;
 
     position: relative;
@@ -1102,21 +1056,36 @@ body {
 
     touch-action: manipulation;
 
-    /*
-       Important for smooth movement
-    */
-
     will-change: transform;
 
+    z-index: 5;
 }
 
 
-/* =========================
+/* =========================================================
+   ARROW VISUAL
+========================================================= */
+
+.arrow-visual {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    left: 0;
+    top: 0;
+
+    pointer-events: none;
+
+    will-change: transform;
+}
+
+
+/* =========================================================
    ARROW SHAFT
-========================= */
+========================================================= */
 
-.board-arrow::before {
-
+.arrow-visual::before {
     content: "";
 
     position: absolute;
@@ -1124,177 +1093,90 @@ body {
     width: 3px;
 
     /*
-       LONG ARROW
+       Keep this below 100%.
+
+       The previous 125% was causing
+       neighboring arrows to overlap
+       and create CROSS shapes.
     */
 
-    height: 92%;
+    height: 94%;
 
     background: #ffffff;
 
-    border-radius: 2px;
+    border-radius: 3px;
 
     left: 50%;
-
     top: 50%;
 
     transform:
         translate(-50%, -50%);
-
 }
 
 
-/* =========================
+/* =========================================================
    ARROW HEAD
-========================= */
+========================================================= */
 
-.board-arrow::after {
-
+.arrow-visual::after {
     content: "";
 
     position: absolute;
 
-    width: 16px;
+    width: 14px;
+    height: 14px;
 
-    height: 16px;
+    border-top: 3px solid #ffffff;
 
-    border-top:
-        3px solid #ffffff;
-
-    border-right:
-        3px solid #ffffff;
+    border-right: 3px solid #ffffff;
 
     left: 50%;
 
-    top: 3%;
+    top: 2%;
 
     transform:
         translateX(-50%)
         rotate(-45deg);
-
 }
 
 
-/* =========================
-   DIRECTIONS
-========================= */
+/* =========================================================
+   ARROW DIRECTIONS
+========================================================= */
 
-.board-arrow.up {
-
-    transform:
-        rotate(0deg);
-
+.arrow-visual.up {
+    transform: rotate(0deg);
 }
 
-.board-arrow.right {
-
-    transform:
-        rotate(90deg);
-
+.arrow-visual.right {
+    transform: rotate(90deg);
 }
 
-.board-arrow.down {
-
-    transform:
-        rotate(180deg);
-
+.arrow-visual.down {
+    transform: rotate(180deg);
 }
 
-.board-arrow.left {
-
-    transform:
-        rotate(270deg);
-
+.arrow-visual.left {
+    transform: rotate(270deg);
 }
 
 
-/* =========================
-   SMALL PHONES
-========================= */
-
-@media (max-width: 340px) {
-
-    .puzzle-board {
-
-        width: 96vw;
-
-    }
-
-    .board-arrow::before {
-
-        width: 2px;
-
-    }
-
-    .board-arrow::after {
-
-        width: 13px;
-        height: 13px;
-
-        border-top-width: 2px;
-        border-right-width: 2px;
-
-    }
-
-}
-
-/* =========================
-   PRESS EFFECT
-========================= */
+/* =========================================================
+   ARROW PRESS EFFECT
+========================================================= */
 
 .board-arrow:active {
-    transform: scale(0.88);
-}
-
-.board-arrow.right:active {
-    transform: rotate(90deg) scale(0.88);
-}
-
-.board-arrow.down:active {
-    transform: rotate(180deg) scale(0.88);
-}
-
-.board-arrow.left:active {
-    transform: rotate(270deg) scale(0.88);
+    opacity: 0.7;
 }
 
 
-/* =========================
-   SMALL PHONES
-========================= */
-
-@media (max-width: 340px) {
-
-    .puzzle-board {
-        width: 90vw;
-    }
-
-    .board-arrow {
-        width: 40px;
-        height: 40px;
-    }
-
-    .board-arrow::before {
-        width: 2px;
-        height: 25px;
-    }
-
-    .board-arrow::after {
-        width: 10px;
-        height: 10px;
-
-        border-top-width: 2px;
-        border-right-width: 2px;
-    }
-
-}
-/* =========================
+/* =========================================================
    BLOCKED ARROW
-========================= */
+========================================================= */
 
 .board-arrow.arrow-blocked {
     animation: arrowBlocked 0.3s ease;
 }
-
 
 @keyframes arrowBlocked {
 
@@ -1313,10 +1195,187 @@ body {
     100% {
         opacity: 1;
     }
-
 }
+
+
+/* =========================================================
+   GAME BOTTOM
+========================================================= */
+
+.game-bottom {
+    width: 100%;
+
+    flex-shrink: 0;
+
+    min-height: 90px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 35px;
+
+    padding: 10px 20px 20px;
+}
+
+
+/* =========================================================
+   BOTTOM BUTTONS
+========================================================= */
+
+.bottom-game-button {
+    width: 70px;
+    height: 70px;
+
+    border: none;
+
+    border-radius: 20px;
+
+    background: rgba(255, 255, 255, 0.08);
+
+    color: white;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.15s ease,
+        background 0.15s ease;
+}
+
+.bottom-game-button:hover {
+    background: rgba(255, 255, 255, 0.14);
+}
+
+.bottom-game-button:active {
+    transform: scale(0.90);
+}
+
+
+/* =========================================================
+   BOTTOM ICON
+========================================================= */
+
+.bottom-icon {
+    font-size: 25px;
+
+    line-height: 27px;
+
+    margin-bottom: 3px;
+}
+
+
+/* =========================================================
+   BOTTOM LABEL
+========================================================= */
+
+.bottom-label {
+    font-size: 7px;
+
+    letter-spacing: 1px;
+
+    color: #8995aa;
+
+    font-weight: bold;
+}
+
+
+/* =========================================================
+   SMALL HEIGHT PHONES
+========================================================= */
+
+@media (max-height: 650px) {
+
+    .game-top {
+        padding-top: 8px;
+    }
+
+    .game-header {
+        height: 48px;
+    }
+
+    .game-icon-button {
+        width: 38px;
+        height: 38px;
+
+        font-size: 20px;
+    }
+
+    .game-info {
+        min-height: 65px;
+    }
+
+    .game-bottom {
+        min-height: 75px;
+
+        padding-bottom: 10px;
+    }
+
+    .bottom-game-button {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+========================================================= */
+
+@media (max-width: 340px) {
+
+    .game-top {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .game-info {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .complexity-stars {
+        font-size: 13px;
+    }
+
+    .heart {
+        font-size: 17px;
+    }
+
+    .puzzle-board {
+        width: 94vw;
+    }
+
+    .arrow-visual::before {
+        width: 2px;
+    }
+
+    .arrow-visual::after {
+        width: 11px;
+        height: 11px;
+
+        border-top-width: 2px;
+        border-right-width: 2px;
+    }
+}
+
+
+/* =========================================================
+   CONFETTI
+========================================================= */
+
 .confetti-container {
     position: fixed;
+
     inset: 0;
 
     width: 100vw;
@@ -1337,7 +1396,9 @@ body {
     border-radius: 2px;
 
     animation-name: confetti-fall;
+
     animation-timing-function: linear;
+
     animation-fill-mode: forwards;
 }
 
