@@ -1,15 +1,18 @@
-import { levelData } from "./levels.js";
+import { levelData, levels } from "./levels.js";
 
 // GAME STATE
 let currentGame = null;
-
+let onLevelComplete = null;
+export function setLevelCompleteCallback(callback) {
+    onLevelComplete = callback;
+}
 // START LEVEL
 export function startGame(levelId) {
     const data = levelData[levelId];
     if (!data) {
         console.error(`Level ${levelId} does not exist.`);
         return;
-    }
+    }   
     currentGame = {
         levelId,
         gridSize: data.gridSize,
@@ -176,92 +179,108 @@ function getDirectionOffset(direction) {
 // EXIT ANIMATION
 
 
+// EXIT ANIMATION
 function animateArrowExit(arrow) {
+    const element = document.querySelector(
+        `.board-arrow[data-arrow-id="${arrow.id}"]`
+    );
 
-    const element = document.querySelector( `.board-arrow[data-arrow-id="${arrow.id}"]`);
-    if (!element) {
-        return;
-    }
-    const cell = element.closest(".puzzle-cell");
     const board = document.getElementById("puzzle-board");
-    if (!cell || !board) {
+
+    if (!element || !board) {
         return;
     }
-    /*
-       Get the actual size of one board cell.
-    */
-    const cellRect = cell.getBoundingClientRect();
-    const cellSize = cellRect.width;
-    /*
-       Move exactly far enough for the
-       arrow to leave its own cell and
-       reach the board edge.
 
-       Because the board has overflow:hidden,
-       the arrow can NEVER visually cross
-       the header or footer.
-    */
+    // Get positions relative to the viewport
+    const elementRect = element.getBoundingClientRect();
+    const boardRect = board.getBoundingClientRect();
 
-    const cellsToEdge = {
-        up:
-            arrow.row + 1,
-        down:
-            currentGame.gridSize -
-            arrow.row,
-        left:
-            arrow.col + 1,
-        right:
-            currentGame.gridSize -
-            arrow.col
-    };
-    const distance = cellsToEdge[arrow.direction] * cellSize;
+    // Current center of the arrow
+    const arrowCenterX =
+        elementRect.left + elementRect.width / 2;
+
+    const arrowCenterY =
+        elementRect.top + elementRect.height / 2;
+
+    // Distance from arrow center to the board edge
+    let distance = 0;
+
+    switch (arrow.direction) {
+        case "up":
+            distance =
+                arrowCenterY - boardRect.top +
+                elementRect.height;
+            break;
+
+        case "down":
+            distance =
+                boardRect.bottom - arrowCenterY +
+                elementRect.height;
+            break;
+
+        case "left":
+            distance =
+                arrowCenterX - boardRect.left +
+                elementRect.width;
+            break;
+
+        case "right":
+            distance =
+                boardRect.right - arrowCenterX +
+                elementRect.width;
+            break;
+    }
 
     let x = 0;
     let y = 0;
+
     switch (arrow.direction) {
         case "up":
             y = -distance;
             break;
+
         case "down":
             y = distance;
             break;
+
         case "left":
             x = -distance;
             break;
+
         case "right":
             x = distance;
             break;
     }
-    /*
-       Preserve the arrow direction.
-    */
+
+    // Keep the arrow pointing in its original direction
     const rotation = {
         up: 0,
         right: 90,
         down: 180,
         left: 270
     };
-    element.style.transition = "transform 0.45s cubic-bezier(0.22, 0.61, 0.36, 1)";
-    element.style.transform = `translate3d(${x}px, ${y}px, 0)
-         rotate(${rotation[arrow.direction]}deg)`;
-    element.style.pointerEvents =
-        "none";
+
+    element.style.transition =
+        "transform 0.65s cubic-bezier(0.22, 0.61, 0.36, 1)";
+
+    element.style.transform =
+        `translate3d(${x}px, ${y}px, 0) rotate(${rotation[arrow.direction]}deg)`;
+
+    element.style.pointerEvents = "none";
 
     setTimeout(() => {
         currentGame.arrows =
             currentGame.arrows.filter(
-                item =>
-                    item.id !== arrow.id
+                item => item.id !== arrow.id
             );
+
         updateArrowCounter();
         renderBoard();
         checkLevelComplete();
-    }, 450);
-
+    }, 650);
 }
-
 // SHAKE BLOCKED ARROW
-function shakeArrow(arrowId) {
+function shakeArrow(arrowId) {  
     const element = document.querySelector( `.board-arrow[data-arrow-id="${arrowId}"]`);
     if (!element) {
         return;
@@ -297,14 +316,181 @@ function updateArrowCounter() {
 
 // LEVEL COMPLETE
 function checkLevelComplete() {
+
     if (
-        currentGame &&
-        currentGame.arrows.length === 0
+        !currentGame ||
+        currentGame.arrows.length !== 0
     ) {
-        console.log(
-            `Level ${currentGame.levelId} complete!`
+        return;
+    }
+
+    const completedLevel =
+        currentGame.levelId;
+
+    // Save completed level
+    saveCompletedLevel(completedLevel);
+
+    // Unlock next level
+    unlockNextLevel(completedLevel);
+
+    // 🎉 Show confetti
+    showConfetti();
+
+    const nextLevel =
+        completedLevel + 1;
+
+    // Wait for confetti, then tell main.js
+    // to open the next level.
+    setTimeout(() => {
+
+        if (levelData[nextLevel]) {
+
+            if (onLevelComplete) {
+                onLevelComplete(nextLevel);
+            }
+
+        } else {
+
+            console.log(
+                "🎉 All levels completed!"
+            );
+
+        }
+
+    }, 1800);
+}
+function unlockNextLevel(levelId) {
+
+    const nextLevelId =
+        levelId + 1;
+
+    const nextLevel =
+        levels.find(
+            level => level.id === nextLevelId
         );
 
-        // Completion screen will be added later.
+    if (nextLevel) {
+
+        nextLevel.unlocked = true;
+
+        console.log(
+            `Level ${nextLevelId} unlocked!`
+        );
     }
+}
+function isLevelUnlocked(levelId) {
+
+    // Level 1 is always unlocked
+    if (levelId === 1) {
+        return true;
+    }
+
+    // Previous level must be completed
+    return isLevelCompleted(levelId - 1);
+}
+function getCompletedLevels() {
+    return JSON.parse(
+        localStorage.getItem("arrowPuzzleCompletedLevels") || "[]"
+    );
+}
+
+function saveCompletedLevel(levelId) {
+    const completedLevels = getCompletedLevels();
+
+    if (!completedLevels.includes(levelId)) {
+        completedLevels.push(levelId);
+
+        localStorage.setItem(
+            "arrowPuzzleCompletedLevels",
+            JSON.stringify(completedLevels)
+        );
+    }
+}
+
+export function isLevelCompleted(levelId) {
+    return getCompletedLevels().includes(levelId);
+}
+
+export function getCompletedLevelList() {
+    return getCompletedLevels();
+}
+
+function showConfetti() {
+
+    const container =
+        document.createElement("div");
+
+    container.className =
+        "confetti-container";
+
+    // Random color palette
+    const colors = [
+        "#ff3b30",
+        "#ffcc00",
+        "#34c759",
+        "#007aff",
+        "#af52de",
+        "#ff2d55",
+        "#5856d6",
+        "#00c7be",
+        "#ff9500"
+    ];
+
+    // Create confetti pieces
+    for (let i = 0; i < 120; i++) {
+
+        const piece =
+            document.createElement("div");
+
+        piece.className =
+            "confetti";
+
+        // Random position
+        piece.style.left =
+            `${Math.random() * 100}%`;
+
+        // Random color
+        piece.style.backgroundColor =
+            colors[
+                Math.floor(
+                    Math.random() * colors.length
+                )
+            ];
+
+        // Random size
+        const width =
+            Math.random() * 7 + 5;
+
+        const height =
+            Math.random() * 12 + 7;
+
+        piece.style.width =
+            `${width}px`;
+
+        piece.style.height =
+            `${height}px`;
+
+        // Random fall speed
+        piece.style.animationDuration =
+            `${Math.random() * 1.5 + 1.5}s`;
+
+        // Random delay
+        piece.style.animationDelay =
+            `${Math.random() * 0.5}s`;
+
+        // Random rotation
+        piece.style.transform =
+            `rotate(${Math.random() * 360}deg)`;
+
+        container.appendChild(piece);
+    }
+
+    document.body.appendChild(container);
+
+    // Remove after animation
+    setTimeout(() => {
+
+        container.remove();
+
+    }, 3500);
 }

@@ -1,10 +1,7 @@
 
-import {
-    levelData,
-    levels,
-    TOTAL_LEVELS
-} from "./levels.js";
-import { startGame } from "./game.js";
+import { levelData,levels,TOTAL_LEVELS } from "./levels.js";
+import { startGame,setLevelCompleteCallback,isLevelCompleted } from "./game.js";
+
 document.addEventListener("DOMContentLoaded", () => {
 
     // =========================
@@ -85,7 +82,22 @@ document.addEventListener("DOMContentLoaded", () => {
     // =========================
 
     let currentLevel = 1;
+setLevelCompleteCallback((nextLevel) => {
 
+    // Update current level
+    currentLevel = nextLevel;
+
+    // Update level number on game screen
+    currentLevelNumber.textContent =
+        nextLevel;
+
+    // Start the new level
+    startGame(nextLevel);
+
+    // Make sure game screen is visible
+    showScreen(gameScreen);
+
+}); 
 
     // =========================
     // SPLASH LOADING
@@ -263,110 +275,84 @@ document.addEventListener("DOMContentLoaded", () => {
     // GENERATE LEVELS
     // =========================
 
-    function generateLevelButtons() {
+function generateLevelButtons() {
 
-        levelsGrid.innerHTML = "";
+    levelsGrid.innerHTML = "";
 
+    levels.forEach(level => {
 
-        levels.forEach(level => {
+        const button =
+            document.createElement("button");
 
-            const button =
-                document.createElement("button");
+        button.classList.add("level-button");
 
+        // Check localStorage
+        const completed =
+            isLevelCompleted(level.id);
+const unlocked =
+    level.id === 1 ||
+    isLevelCompleted(level.id - 1);
+        // =========================
+        // UNLOCKED
+        // =========================
 
-            button.classList.add(
-                "level-button"
-            );
+       if (unlocked) {
 
+    button.classList.add("unlocked");
 
-            // =========================
-            // UNLOCKED
-            // =========================
+    button.innerHTML = `
+        <span class="level-number">
+            ${level.id}
+        </span>
 
-            if (level.unlocked) {
+        <span class="level-label">
+            LEVEL
+        </span>
+    `;
 
-                button.classList.add(
-                    "unlocked"
-                );
+    button.addEventListener("click", () => {
+        selectLevel(level.id);
+    });
 
+} else {
 
-                button.innerHTML = `
-                    <span class="level-number">
-                        ${level.id}
-                    </span>
+    button.classList.add("locked");
 
-                    <span class="level-label">
-                        LEVEL
-                    </span>
-                `;
+    button.innerHTML = `
+        <span class="lock-icon">
+            🔒
+        </span>
 
+        <span class="level-number">
+            ${level.id}
+        </span>
+    `;
+}
 
-                button.addEventListener(
-                    "click",
-                    () => {
+        // =========================
+        // COMPLETED
+        // =========================
 
-                        selectLevel(level.id);
+        if (completed) {
 
-                    }
-                );
+            button.classList.add("completed");
 
-            }
+            const check =
+                document.createElement("span");
 
+            check.className =
+                "level-check";
 
-            // =========================
-            // LOCKED
-            // =========================
+            check.textContent = "✓";
 
-            else {
+            button.appendChild(check);
+        }
 
-                button.classList.add(
-                    "locked"
-                );
+        levelsGrid.appendChild(button);
 
+    });
 
-                button.innerHTML = `
-                    <span class="lock-icon">
-                        🔒
-                    </span>
-
-                    <span class="level-number">
-                        ${level.id}
-                    </span>
-                `;
-
-            }
-
-
-            // =========================
-            // COMPLETED
-            // =========================
-
-            if (level.completed) {
-
-                button.classList.add(
-                    "completed"
-                );
-
-
-                const star =
-                    document.createElement("span");
-
-                star.className =
-                    "completed-star";
-
-                star.textContent = "★";
-
-
-                button.appendChild(star);
-
-            }
-
-
-            levelsGrid.appendChild(button);
-
-        });
-
-    }
+}
 
 
     // =========================
@@ -375,24 +361,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function updateLevelProgress() {
 
-        const unlockedLevels =
-            levels.filter(
-                level => level.unlocked
-            ).length;
+    const completedLevels =
+        levels.filter(level =>
+            isLevelCompleted(level.id)
+        ).length;
 
+    progressText.textContent =
+        `${completedLevels} / ${TOTAL_LEVELS}`;
 
-        progressText.textContent =
-            `${unlockedLevels} / ${TOTAL_LEVELS}`;
+    const percentage =
+        (completedLevels / TOTAL_LEVELS) * 100;
 
-
-        const percentage =
-            (unlockedLevels / TOTAL_LEVELS) * 100;
-
-
-        progressBar.style.width =
-            `${percentage}%`;
-
-    }
+    progressBar.style.width =
+        `${percentage}%`;
+}
 
 
     // =========================
