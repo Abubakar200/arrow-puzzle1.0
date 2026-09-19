@@ -1,306 +1,211 @@
-
-import { levelData,levels,TOTAL_LEVELS } from "./levels.js";
-import { startGame,setLevelCompleteCallback,isLevelCompleted } from "./game.js";
+import { levelData, levels, TOTAL_LEVELS } from "./levels.js";
+import {
+  startGame,
+  setLevelCompleteCallback,
+  isLevelCompleted,
+} from "./game.js";
 
 document.addEventListener("DOMContentLoaded", () => {
+  // =========================
+  // SCREENS
+  // =========================
 
-    // =========================
-    // SCREENS
-    // =========================
+  const splashScreen = document.getElementById("splash-screen");
 
-    const splashScreen =
-        document.getElementById("splash-screen");
+  const homeScreen = document.getElementById("home-screen");
 
-    const homeScreen =
-        document.getElementById("home-screen");
+  const levelScreen = document.getElementById("level-screen");
 
-    const levelScreen =
-        document.getElementById("level-screen");
+  const gameScreen = document.getElementById("game-screen");
 
-    const gameScreen =
-        document.getElementById("game-screen");
+  // =========================
+  // SPLASH
+  // =========================
 
+  const loadingProgress = document.getElementById("loading-progress");
 
-    // =========================
-    // SPLASH
-    // =========================
+  const loadingText = document.getElementById("loading-text");
 
-    const loadingProgress =
-        document.getElementById("loading-progress");
+  // =========================
+  // HOME BUTTON
+  // =========================
 
-    const loadingText =
-        document.getElementById("loading-text");
+  const playButton = document.getElementById("play-btn");
 
+  // =========================
+  // LEVEL SCREEN
+  // =========================
 
-    // =========================
-    // HOME BUTTON
-    // =========================
+  const levelBackButton = document.getElementById("level-back-btn");
 
-    const playButton =
-        document.getElementById("play-btn");
+  const levelsGrid = document.getElementById("levels-grid");
 
+  const progressText = document.getElementById("level-progress-text");
 
-    // =========================
-    // LEVEL SCREEN
-    // =========================
+  const progressBar = document.getElementById("level-progress-bar");
 
-    const levelBackButton =
-        document.getElementById("level-back-btn");
+  // =========================
+  // GAME SCREEN
+  // =========================
 
-    const levelsGrid =
-        document.getElementById("levels-grid");
+  const gameBackButton = document.getElementById("game-back-btn");
 
-    const progressText =
-        document.getElementById("level-progress-text");
+  const gameSettingsButton = document.getElementById("game-settings-btn");
 
-    const progressBar =
-        document.getElementById("level-progress-bar");
+  const levelSelectButton = document.getElementById("level-select-btn");
 
+  const hintButton = document.getElementById("hint-btn");
 
-    // =========================
-    // GAME SCREEN
-    // =========================
+  const currentLevelNumber = document.getElementById("current-level-number");
 
-    const gameBackButton =
-        document.getElementById("game-back-btn");
+  // =========================
+  // GAME STATE
+  // =========================
 
-    const gameSettingsButton =
-        document.getElementById("game-settings-btn");
-
-    const levelSelectButton =
-        document.getElementById("level-select-btn");
-
-    const hintButton =
-        document.getElementById("hint-btn");
-
-    const currentLevelNumber =
-        document.getElementById("current-level-number");
-
-
-    // =========================
-    // GAME STATE
-    // =========================
-
-    let currentLevel = 1;
-setLevelCompleteCallback((nextLevel) => {
-
+  let currentLevel = 1;
+  setLevelCompleteCallback((nextLevel) => {
     // Update current level
     currentLevel = nextLevel;
 
     // Update level number on game screen
-    currentLevelNumber.textContent =
-        nextLevel;
+    currentLevelNumber.textContent = nextLevel;
 
     // Start the new level
     startGame(nextLevel);
 
     // Make sure game screen is visible
     showScreen(gameScreen);
+  });
 
-}); 
+  // =========================
+  // SPLASH LOADING
+  // =========================
 
-    // =========================
-    // SPLASH LOADING
-    // =========================
+  let progress = 0;
 
-    let progress = 0;
+  const loadingInterval = setInterval(() => {
+    progress += Math.floor(Math.random() * 8) + 3;
 
+    if (progress >= 100) {
+      progress = 100;
 
-    const loadingInterval = setInterval(() => {
+      clearInterval(loadingInterval);
 
-        progress += Math.floor(Math.random() * 8) + 3;
+      loadingText.textContent = "Ready!";
 
-
-        if (progress >= 100) {
-
-            progress = 100;
-
-            clearInterval(loadingInterval);
-
-            loadingText.textContent = "Ready!";
-
-
-            setTimeout(() => {
-
-                showScreen(homeScreen);
-
-            }, 500);
-
-        }
-
-
-        loadingProgress.style.width =
-            `${progress}%`;
-
-
-        if (progress < 30) {
-
-            loadingText.textContent =
-                "Loading...";
-
-        }
-        else if (progress < 60) {
-
-            loadingText.textContent =
-                "Preparing puzzle...";
-
-        }
-        else if (progress < 90) {
-
-            loadingText.textContent =
-                "Loading levels...";
-
-        }
-        else {
-
-            loadingText.textContent =
-                "Almost ready...";
-
-        }
-
-    }, 120);
-
-
-    // =========================
-    // PLAY
-    // =========================
-
-    playButton.addEventListener("click", () => {
-
-        showLevelScreen();
-
-    });
-
-
-    // =========================
-    // LEVEL SCREEN BACK
-    // =========================
-
-    levelBackButton.addEventListener("click", () => {
-
+      setTimeout(() => {
         showScreen(homeScreen);
-
-    });
-
-
-    // =========================
-    // GAME BACK
-    // =========================
-
-    gameBackButton.addEventListener("click", () => {
-
-        showScreen(levelScreen);
-
-    });
-
-
-    // =========================
-    // LEVEL SELECTION BUTTON
-    // =========================
-
-    levelSelectButton.addEventListener(
-        "click",
-        () => {
-
-            showLevelScreen();
-
-        }
-    );
-
-
-    // =========================
-    // SETTINGS
-    // =========================
-
-    gameSettingsButton.addEventListener(
-        "click",
-        () => {
-
-            console.log("Game settings clicked");
-
-        }
-    );
-
-
-    // =========================
-    // HINT
-    // =========================
-
-    hintButton.addEventListener(
-        "click",
-        () => {
-
-            console.log("Hint clicked");
-
-        }
-    );
-
-
-    // =========================
-    // SHOW SCREEN
-    // =========================
-
-    function showScreen(screen) {
-
-        document
-            .querySelectorAll(".screen")
-            .forEach(item => {
-
-                item.classList.remove("active");
-
-            });
-
-
-        screen.classList.add("active");
-
+      }, 500);
     }
 
+    loadingProgress.style.width = `${progress}%`;
 
-    // =========================
-    // SHOW LEVEL SCREEN
-    // =========================
-
-    function showLevelScreen() {
-
-        generateLevelButtons();
-
-        updateLevelProgress();
-
-        showScreen(levelScreen);
-
+    if (progress < 30) {
+      loadingText.textContent = "Loading...";
+    } else if (progress < 60) {
+      loadingText.textContent = "Preparing puzzle...";
+    } else if (progress < 90) {
+      loadingText.textContent = "Loading levels...";
+    } else {
+      loadingText.textContent = "Almost ready...";
     }
+  }, 120);
 
+  // =========================
+  // PLAY
+  // =========================
 
-    // =========================
-    // GENERATE LEVELS
-    // =========================
+  playButton.addEventListener("click", () => {
+    showLevelScreen();
+  });
 
-function generateLevelButtons() {
+  // =========================
+  // LEVEL SCREEN BACK
+  // =========================
 
+  levelBackButton.addEventListener("click", () => {
+    showScreen(homeScreen);
+  });
+
+  // =========================
+  // GAME BACK
+  // =========================
+
+  gameBackButton.addEventListener("click", () => {
+    showScreen(levelScreen);
+  });
+
+  // =========================
+  // LEVEL SELECTION BUTTON
+  // =========================
+
+  levelSelectButton.addEventListener("click", () => {
+    showLevelScreen();
+  });
+
+  // =========================
+  // SETTINGS
+  // =========================
+
+  gameSettingsButton.addEventListener("click", () => {
+    console.log("Game settings clicked");
+  });
+
+  // =========================
+  // HINT
+  // =========================
+
+  hintButton.addEventListener("click", () => {
+    console.log("Hint clicked");
+  });
+
+  // =========================
+  // SHOW SCREEN
+  // =========================
+
+  function showScreen(screen) {
+    document.querySelectorAll(".screen").forEach((item) => {
+      item.classList.remove("active");
+    });
+
+    screen.classList.add("active");
+  }
+
+  // =========================
+  // SHOW LEVEL SCREEN
+  // =========================
+
+  function showLevelScreen() {
+    generateLevelButtons();
+
+    updateLevelProgress();
+
+    showScreen(levelScreen);
+  }
+
+  // =========================
+  // GENERATE LEVELS
+  // =========================
+
+  function generateLevelButtons() {
     levelsGrid.innerHTML = "";
 
-    levels.forEach(level => {
+    levels.forEach((level) => {
+      const button = document.createElement("button");
 
-        const button =
-            document.createElement("button");
+      button.classList.add("level-button");
 
-        button.classList.add("level-button");
+      // Check localStorage
+      const completed = isLevelCompleted(level.id);
+      const unlocked = level.id === 1 || isLevelCompleted(level.id - 1);
+      // =========================
+      // UNLOCKED
+      // =========================
 
-        // Check localStorage
-        const completed =
-            isLevelCompleted(level.id);
-const unlocked =
-    level.id === 1 ||
-    isLevelCompleted(level.id - 1);
-        // =========================
-        // UNLOCKED
-        // =========================
+      if (unlocked) {
+        button.classList.add("unlocked");
 
-       if (unlocked) {
-
-    button.classList.add("unlocked");
-
-    button.innerHTML = `
+        button.innerHTML = `
         <span class="level-number">
             ${level.id}
         </span>
@@ -310,15 +215,13 @@ const unlocked =
         </span>
     `;
 
-    button.addEventListener("click", () => {
-        selectLevel(level.id);
-    });
+        button.addEventListener("click", () => {
+          selectLevel(level.id);
+        });
+      } else {
+        button.classList.add("locked");
 
-} else {
-
-    button.classList.add("locked");
-
-    button.innerHTML = `
+        button.innerHTML = `
         <span class="lock-icon">
             🔒
         </span>
@@ -327,225 +230,141 @@ const unlocked =
             ${level.id}
         </span>
     `;
-}
+      }
 
-        // =========================
-        // COMPLETED
-        // =========================
+      // =========================
+      // COMPLETED
+      // =========================
 
-        if (completed) {
+      if (completed) {
+        button.classList.add("completed");
 
-            button.classList.add("completed");
+        const check = document.createElement("span");
 
-            const check =
-                document.createElement("span");
+        check.className = "level-check";
 
-            check.className =
-                "level-check";
+        check.textContent = "✓";
 
-            check.textContent = "✓";
+        button.appendChild(check);
+      }
 
-            button.appendChild(check);
-        }
-
-        levelsGrid.appendChild(button);
-
+      levelsGrid.appendChild(button);
     });
+  }
 
-}
+  // =========================
+  // LEVEL PROGRESS
+  // =========================
 
+  function updateLevelProgress() {
+    const completedLevels = levels.filter((level) =>
+      isLevelCompleted(level.id),
+    ).length;
 
-    // =========================
-    // LEVEL PROGRESS
-    // =========================
+    progressText.textContent = `${completedLevels} / ${TOTAL_LEVELS}`;
 
-    function updateLevelProgress() {
+    const percentage = (completedLevels / TOTAL_LEVELS) * 100;
 
-    const completedLevels =
-        levels.filter(level =>
-            isLevelCompleted(level.id)
-        ).length;
+    progressBar.style.width = `${percentage}%`;
+  }
 
-    progressText.textContent =
-        `${completedLevels} / ${TOTAL_LEVELS}`;
+  // =========================
+  // SELECT LEVEL
+  // =========================
 
-    const percentage =
-        (completedLevels / TOTAL_LEVELS) * 100;
+  // =========================
+  // SELECT LEVEL
+  // =========================
 
-    progressBar.style.width =
-        `${percentage}%`;
-}
-
-
-    // =========================
-    // SELECT LEVEL
-    // =========================
-
-    // =========================
-    // SELECT LEVEL
-    // =========================
-
-    function selectLevel(levelId) {
-
+  function selectLevel(levelId) {
     currentLevel = levelId;
 
-    currentLevelNumber.textContent =
-        levelId;
-
+    currentLevelNumber.textContent = levelId;
 
     startGame(levelId);
 
-
     showScreen(gameScreen);
+  }
 
-}
+  // =========================
+  // CREATE GAME BOARD
+  // =========================
 
+  function showGameBoard(levelId) {
+    const board = document.getElementById("puzzle-board");
+
+    const data = levelData[levelId];
+
+    if (!data) {
+      console.error(`Level ${levelId} does not exist yet.`);
+
+      return;
+    }
+
+    // Clear previous board
+
+    board.innerHTML = "";
+
+    // Set grid size
+
+    board.style.gridTemplateColumns = `repeat(${data.gridSize}, 1fr)`;
+
+    board.style.gridTemplateRows = `repeat(${data.gridSize}, 1fr)`;
 
     // =========================
-    // CREATE GAME BOARD
+    // CREATE CELLS
     // =========================
 
-    function showGameBoard(levelId) {
+    for (let row = 0; row < data.gridSize; row++) {
+      for (let col = 0; col < data.gridSize; col++) {
+        const cell = document.createElement("div");
 
-        const board =
-            document.getElementById("puzzle-board");
+        cell.className = "puzzle-cell";
 
+        cell.dataset.row = row;
+        cell.dataset.col = col;
 
-        const data =
-            levelData[levelId];
+        // Check whether
+        // an arrow belongs here
 
+        const arrow = data.arrows.find(
+          (item) => item.row === row && item.col === col,
+        );
 
-        if (!data) {
-
-            console.error(
-                `Level ${levelId} does not exist yet.`
-            );
-
-            return;
-
+        if (arrow) {
+          createArrow(cell, arrow.direction);
         }
 
-
-        // Clear previous board
-
-        board.innerHTML = "";
-
-
-        // Set grid size
-
-        board.style.gridTemplateColumns =
-            `repeat(${data.gridSize}, 1fr)`;
-
-        board.style.gridTemplateRows =
-            `repeat(${data.gridSize}, 1fr)`;
-
-
-        // =========================
-        // CREATE CELLS
-        // =========================
-
-        for (
-            let row = 0;
-            row < data.gridSize;
-            row++
-        ) {
-
-            for (
-                let col = 0;
-                col < data.gridSize;
-                col++
-            ) {
-
-                const cell =
-                    document.createElement("div");
-
-
-                cell.className =
-                    "puzzle-cell";
-
-
-                cell.dataset.row = row;
-                cell.dataset.col = col;
-
-
-                // Check whether
-                // an arrow belongs here
-
-                const arrow =
-                    data.arrows.find(
-                        item =>
-                            item.row === row &&
-                            item.col === col
-                    );
-
-
-                if (arrow) {
-
-                    createArrow(
-                        cell,
-                        arrow.direction
-                    );
-
-                }
-
-
-                board.appendChild(cell);
-
-            }
-
-        }
-
-
-        // Update arrow counter
-
-        updateArrowCounter(data.arrows.length);
-
+        board.appendChild(cell);
+      }
     }
 
+    // Update arrow counter
 
-    // =========================
-    // CREATE ARROW
-    // =========================
+    updateArrowCounter(data.arrows.length);
+  }
 
-    function createArrow(
-        cell,
-        direction
-    ) {
+  // =========================
+  // CREATE ARROW
+  // =========================
 
-        const arrow =
-            document.createElement("div");
+  function createArrow(cell, direction) {
+    const arrow = document.createElement("div");
 
+    arrow.className = `board-arrow ${direction}`;
 
-        arrow.className =
-            `board-arrow ${direction}`;
+    arrow.dataset.direction = direction;
 
+    cell.appendChild(arrow);
+  }
 
-        arrow.dataset.direction =
-            direction;
+  // =========================
+  // UPDATE ARROW COUNTER
+  // =========================
 
+  function updateArrowCounter(count) {
+    const counter = document.getElementById("arrow-count");
 
-        cell.appendChild(arrow);
-
-    }
-
-
-    // =========================
-    // UPDATE ARROW COUNTER
-    // =========================
-
-    function updateArrowCounter(count) {
-
-        const counter =
-            document.getElementById(
-                "arrow-count"
-            );
-
-
-        counter.textContent = count;
-
-    }
-
-
-
+    counter.textContent = count;
+  }
 });
-
