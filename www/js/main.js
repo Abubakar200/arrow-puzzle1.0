@@ -2,7 +2,9 @@ import { levelData, levels, TOTAL_LEVELS } from "./levels.js";
 import {
   startGame,
   setLevelCompleteCallback,
+  setGameOverExitCallback,
   isLevelCompleted,
+  hideGameOver,
 } from "./game.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -77,6 +79,10 @@ document.addEventListener("DOMContentLoaded", () => {
     showScreen(gameScreen);
   });
 
+  setGameOverExitCallback(() => {
+    showLevelScreen();
+  });
+
   // =========================
   // SPLASH LOADING
   // =========================
@@ -132,6 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // =========================
 
   gameBackButton.addEventListener("click", () => {
+    hideGameOver();
     showScreen(levelScreen);
   });
 
@@ -140,6 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // =========================
 
   levelSelectButton.addEventListener("click", () => {
+    hideGameOver();
     showLevelScreen();
   });
 

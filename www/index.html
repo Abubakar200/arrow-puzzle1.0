@@ -158,6 +158,26 @@
             <span class="bottom-label"> LEVELS </span>
           </button>
         </div>
+
+        <div
+          id="game-over-overlay"
+          class="game-over-overlay"
+          aria-hidden="true"
+        >
+          <div class="game-over-card">
+            <p class="game-over-kicker">OUT OF LIVES</p>
+            <h2>GAME OVER</h2>
+            <p class="game-over-text">
+              A blocked arrow costs a heart. Try this level again.
+            </p>
+            <button id="game-over-retry-btn" class="menu-button play-button">
+              RETRY
+            </button>
+            <button id="game-over-levels-btn" class="menu-button">
+              LEVELS
+            </button>
+          </div>
+        </div>
       </div>
     </section>
     <script type="module" src="js/main.js"></script>

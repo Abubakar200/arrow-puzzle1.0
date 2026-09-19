@@ -1,11 +1,30 @@
 import { levelData, levels } from "./levels.js";
 
+const MAX_LIVES = 3;
+
 // GAME STATE
 let currentGame = null;
 let onLevelComplete = null;
+let onGameOverExit = null;
+let overlayBound = false;
+
 export function setLevelCompleteCallback(callback) {
   onLevelComplete = callback;
 }
+
+export function setGameOverExitCallback(callback) {
+  onGameOverExit = callback;
+}
+
+export function hideGameOver() {
+  const overlay = document.getElementById("game-over-overlay");
+  if (!overlay) {
+    return;
+  }
+  overlay.classList.remove("visible");
+  overlay.setAttribute("aria-hidden", "true");
+}
+
 // START LEVEL
 export function startGame(levelId) {
   const data = levelData[levelId];
@@ -13,9 +32,13 @@ export function startGame(levelId) {
     console.error(`Level ${levelId} does not exist.`);
     return;
   }
+  bindGameOverOverlay();
+  hideGameOver();
   currentGame = {
     levelId,
     gridSize: data.gridSize,
+    lives: MAX_LIVES,
+    gameOver: false,
     arrows: data.arrows.map((arrow, index) => ({
       id: index,
       row: arrow.row,
@@ -26,6 +49,7 @@ export function startGame(levelId) {
   };
   renderBoard();
   updateArrowCounter();
+  renderLives();
 }
 
 // RENDER BOARD
@@ -59,27 +83,32 @@ function renderBoard() {
 
 // CREATE ARROW
 function createArrow(cell, arrowData) {
-    const arrow = document.createElement("div");
+  const arrow = document.createElement("div");
 
-    arrow.className = "board-arrow";
-    arrow.dataset.arrowId = arrowData.id;
+  arrow.className = "board-arrow";
+  arrow.dataset.arrowId = arrowData.id;
 
-    const visual = document.createElement("div");
+  const visual = document.createElement("div");
+  visual.className = `arrow-visual ${arrowData.direction}`;
+  visual.innerHTML = `
+    <svg class="arrow-graphic" viewBox="0 0 100 100" aria-hidden="true">
+      <line class="arrow-shaft" x1="50" y1="90" x2="50" y2="30" />
+      <polyline class="arrow-head" points="28,48 50,18 72,48" />
+    </svg>
+  `;
 
-    visual.className = `arrow-visual ${arrowData.direction}`;
+  arrow.appendChild(visual);
 
-    arrow.appendChild(visual);
+  arrow.addEventListener("click", () => {
+    moveArrow(arrowData.id);
+  });
 
-    arrow.addEventListener("click", () => {
-        moveArrow(arrowData.id);
-    });
-
-    cell.appendChild(arrow);
+  cell.appendChild(arrow);
 }
 // MOVE ARROW
 
 function moveArrow(arrowId) {
-  if (!currentGame) {
+  if (!currentGame || currentGame.gameOver) {
     return;
   }
   const arrow = currentGame.arrows.find((item) => item.id === arrowId);
@@ -90,9 +119,8 @@ function moveArrow(arrowId) {
   // Check whether the arrow
   // has a clear path to exit.
   if (!canArrowExit(arrow)) {
-    // For now we simply give
-    // a small visual feedback.
-    shakeArrow(arrow.id);
+    playCollision(arrow);
+    loseLife();
     return;
   }
   arrow.moving = true;
@@ -121,12 +149,7 @@ function canArrowExit(arrow) {
     // Check if another arrow
     // is occupying this cell
 
-    const blocked = currentGame.arrows.some(
-      (other) =>
-        other.id !== arrow.id && other.row === row && other.col === col,
-    );
-
-    if (blocked) {
+    if (getArrowAt(row, col, arrow.id)) {
       return false;
     }
   }
@@ -282,22 +305,181 @@ function animateArrowExit(arrow) {
 
   }, 650);
 }
-// SHAKE BLOCKED ARROW
-function shakeArrow(arrowId) {
-  const element = document.querySelector(
-    `.board-arrow[data-arrow-id="${arrowId}"]`,
+function getArrowAt(row, col, exceptId) {
+  return currentGame.arrows.find(
+    (other) =>
+      other.id !== exceptId && other.row === row && other.col === col,
   );
+}
+
+function findBlockingArrow(arrow) {
+  let row = arrow.row;
+  let col = arrow.col;
+  const direction = getDirectionOffset(arrow.direction);
+
+  while (true) {
+    row += direction.row;
+    col += direction.col;
+
+    if (
+      row < 0 ||
+      row >= currentGame.gridSize ||
+      col < 0 ||
+      col >= currentGame.gridSize
+    ) {
+      return null;
+    }
+
+    const blocker = getArrowAt(row, col, arrow.id);
+    if (blocker) {
+      return blocker;
+    }
+  }
+}
+
+function playCollision(arrow) {
+  const element = document.querySelector(
+    `.board-arrow[data-arrow-id="${arrow.id}"]`,
+  );
+  const blocker = findBlockingArrow(arrow);
+  const blockerElement = blocker
+    ? document.querySelector(`.board-arrow[data-arrow-id="${blocker.id}"]`)
+    : null;
+
   if (!element) {
     return;
   }
-  element.classList.remove("arrow-blocked");
 
-  // Force browser reflow
-  void element.offsetWidth;
-  element.classList.add("arrow-blocked");
+  arrow.moving = true;
+
+  const direction = getDirectionOffset(arrow.direction);
+  const cell = element.closest(".puzzle-cell");
+  const lunge = (cell ? cell.offsetWidth : 48) * 0.32;
+  const x = direction.col * lunge;
+  const y = direction.row * lunge;
+
+  element.classList.remove("arrow-collision");
+  blockerElement?.classList.remove("arrow-collision");
+
+  element.style.transition =
+    "transform 0.11s cubic-bezier(0.2, 0.7, 0.3, 1)";
+  element.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+
   setTimeout(() => {
-    element.classList.remove("arrow-blocked");
-  }, 300);
+    spawnCollisionBurst(element, direction);
+    element.classList.add("arrow-collision");
+    blockerElement?.classList.add("arrow-collision");
+
+    element.style.transition =
+      "transform 0.2s cubic-bezier(0.18, 0.85, 0.32, 1)";
+    element.style.transform = "translate3d(0, 0, 0)";
+
+    setTimeout(() => {
+      element.classList.remove("arrow-collision");
+      blockerElement?.classList.remove("arrow-collision");
+      element.style.transition = "";
+      element.style.transform = "";
+      if (arrow) {
+        arrow.moving = false;
+      }
+    }, 280);
+  }, 110);
+}
+
+function spawnCollisionBurst(element, direction) {
+  const board = document.getElementById("puzzle-board");
+  if (!board) {
+    return;
+  }
+
+  const rect = element.getBoundingClientRect();
+  const boardRect = board.getBoundingClientRect();
+  const burst = document.createElement("div");
+
+  burst.className = "collision-burst";
+  burst.style.left = `${
+    rect.left -
+    boardRect.left +
+    rect.width / 2 +
+    direction.col * rect.width * 0.42
+  }px`;
+  burst.style.top = `${
+    rect.top -
+    boardRect.top +
+    rect.height / 2 +
+    direction.row * rect.height * 0.42
+  }px`;
+
+  board.appendChild(burst);
+  setTimeout(() => burst.remove(), 420);
+}
+
+function loseLife() {
+  if (!currentGame || currentGame.gameOver || currentGame.lives <= 0) {
+    return;
+  }
+
+  currentGame.lives -= 1;
+  renderLives(currentGame.lives);
+
+  if (currentGame.lives <= 0) {
+    currentGame.gameOver = true;
+    setTimeout(showGameOver, 520);
+  }
+}
+
+function renderLives(justLostIndex) {
+  const hearts = document.querySelectorAll("#lives-container .heart");
+
+  hearts.forEach((heart, index) => {
+    const alive = currentGame && index < currentGame.lives;
+    heart.classList.toggle("active", Boolean(alive));
+    heart.classList.toggle("lost", !alive);
+    heart.classList.remove("just-lost");
+
+    if (!alive && justLostIndex === index) {
+      void heart.offsetWidth;
+      heart.classList.add("just-lost");
+    }
+  });
+}
+
+function showGameOver() {
+  const overlay = document.getElementById("game-over-overlay");
+  if (!overlay) {
+    return;
+  }
+  overlay.classList.add("visible");
+  overlay.setAttribute("aria-hidden", "false");
+}
+
+function bindGameOverOverlay() {
+  if (overlayBound) {
+    return;
+  }
+
+  const retryButton = document.getElementById("game-over-retry-btn");
+  const levelsButton = document.getElementById("game-over-levels-btn");
+
+  if (!retryButton || !levelsButton) {
+    return;
+  }
+
+  overlayBound = true;
+
+  retryButton.addEventListener("click", () => {
+    if (!currentGame) {
+      return;
+    }
+    startGame(currentGame.levelId);
+  });
+
+  levelsButton.addEventListener("click", () => {
+    hideGameOver();
+    if (onGameOverExit) {
+      onGameOverExit();
+    }
+  });
 }
 
 // UPDATE COUNTER

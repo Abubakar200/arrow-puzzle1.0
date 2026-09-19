@@ -744,6 +744,8 @@ body {
     flex-direction: column;
 
     overflow: hidden;
+
+    position: relative;
 }
 
 
@@ -942,6 +944,22 @@ body {
     transform: scale(0.85);
 }
 
+.heart.just-lost {
+    animation: heartLost 0.35s ease;
+}
+
+@keyframes heartLost {
+    0% {
+        transform: scale(1.25);
+        color: #ff3b30;
+    }
+
+    100% {
+        transform: scale(0.85);
+        color: rgba(255, 255, 255, 0.12);
+    }
+}
+
 
 /* =========================================================
    PUZZLE AREA
@@ -981,23 +999,14 @@ body {
 
     gap: 0;
 
-    padding: 0;
+    padding: 10px;
 
-    background: transparent;
 
     border: none;
 
-    box-shadow: none;
+    border-radius: 18px;
 
-    /*
-       VERY IMPORTANT:
-
-       The entire puzzle board is the
-       animation viewport.
-
-       Arrows may move through cells,
-       but cannot escape the board.
-    */
+   
 
     overflow: hidden;
 
@@ -1050,6 +1059,7 @@ body {
     align-items: center;
     justify-content: center;
 
+
     cursor: pointer;
 
     user-select: none;
@@ -1080,63 +1090,26 @@ body {
     will-change: transform;
 }
 
+.arrow-graphic {
+    width: 100%;
+    height: 100%;
 
-/* =========================================================
-   ARROW SHAFT
-========================================================= */
+    overflow: visible;
 
-.arrow-visual::before {
-    content: "";
-
-    position: absolute;
-
-    width: 3px;
-
-    /*
-       Keep this below 100%.
-
-       The previous 125% was causing
-       neighboring arrows to overlap
-       and create CROSS shapes.
-    */
-
-    height: 94%;
-
-    background: #ffffff;
-
-    border-radius: 3px;
-
-    left: 50%;
-    top: 50%;
-
-    transform:
-        translate(-50%, -50%);
+    display: block;
 }
 
+.arrow-shaft,
+.arrow-head {
+    fill: none;
 
-/* =========================================================
-   ARROW HEAD
-========================================================= */
+    stroke: currentColor;
 
-.arrow-visual::after {
-    content: "";
+    stroke-width: 9.5;
 
-    position: absolute;
+    stroke-linecap: round;
 
-    width: 14px;
-    height: 14px;
-
-    border-top: 3px solid #ffffff;
-
-    border-right: 3px solid #ffffff;
-
-    left: 50%;
-
-    top: 2%;
-
-    transform:
-        translateX(-50%)
-        rotate(-45deg);
+    stroke-linejoin: round;
 }
 
 
@@ -1166,34 +1139,104 @@ body {
 ========================================================= */
 
 .board-arrow:active {
-    opacity: 0.7;
+    opacity: 0.78;
 }
 
 
 /* =========================================================
-   BLOCKED ARROW
+   COLLISION
 ========================================================= */
 
-.board-arrow.arrow-blocked {
-    animation: arrowBlocked 0.3s ease;
+.board-arrow.arrow-collision {
+    color: #e11d48;
+
+    z-index: 8;
 }
 
-@keyframes arrowBlocked {
+.board-arrow.arrow-collision .arrow-graphic {
+    animation: collisionRecoil 0.32s ease;
+}
 
+@keyframes collisionRecoil {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    18% {
+        transform: translateY(7px);
+    }
+
+    42% {
+        transform: translateY(-4px);
+    }
+
+    68% {
+        transform: translateY(2px);
+    }
+}
+
+.collision-burst {
+    position: absolute;
+
+    width: 18px;
+    height: 18px;
+
+    margin-left: -9px;
+    margin-top: -9px;
+
+    border-radius: 50%;
+
+    pointer-events: none;
+
+    z-index: 20;
+
+    background: rgba(225, 29, 72, 0.95);
+
+    box-shadow:
+        0 0 0 0 rgba(225, 29, 72, 0.45);
+
+    animation: collisionBurst 0.4s ease-out forwards;
+}
+
+.collision-burst::before,
+.collision-burst::after {
+    content: "";
+
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width: 10px;
+    height: 3px;
+
+    border-radius: 3px;
+
+    background: #e11d48;
+
+    transform: translate(-50%, -50%);
+}
+
+.collision-burst::before {
+    transform: translate(-50%, -50%) rotate(40deg);
+}
+
+.collision-burst::after {
+    transform: translate(-50%, -50%) rotate(-40deg);
+}
+
+@keyframes collisionBurst {
     0% {
+        transform: scale(0.35);
         opacity: 1;
-    }
-
-    30% {
-        opacity: 0.45;
-    }
-
-    60% {
-        opacity: 1;
+        box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.5);
     }
 
     100% {
-        opacity: 1;
+        transform: scale(1.7);
+        opacity: 0;
+        box-shadow: 0 0 0 16px rgba(225, 29, 72, 0);
     }
 }
 
@@ -1353,18 +1396,15 @@ body {
 
     .puzzle-board {
         width: 94vw;
+
+        padding: 8px;
+
+        border-radius: 14px;
     }
 
-    .arrow-visual::before {
-        width: 2px;
-    }
-
-    .arrow-visual::after {
-        width: 11px;
-        height: 11px;
-
-        border-top-width: 2px;
-        border-right-width: 2px;
+    .arrow-shaft,
+    .arrow-head {
+        stroke-width: 8.5;
     }
 }
 
@@ -1400,6 +1440,84 @@ body {
     animation-timing-function: linear;
 
     animation-fill-mode: forwards;
+}
+
+.game-over-overlay {
+    position: absolute;
+
+    inset: 0;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+
+    background: rgba(8, 10, 16, 0.78);
+
+    z-index: 30;
+}
+
+.game-over-overlay.visible {
+    display: flex;
+}
+
+.game-over-card {
+    width: min(100%, 320px);
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 12px;
+
+    padding: 28px 22px 22px;
+
+    text-align: center;
+
+    border-radius: 22px;
+
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            #3a4666 0%,
+            #1a2030 55%,
+            #12161f 100%
+        );
+
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
+}
+
+.game-over-kicker {
+    font-size: 11px;
+
+    letter-spacing: 2px;
+
+    font-weight: 700;
+
+    color: #ff6b61;
+}
+
+.game-over-card h2 {
+    font-size: 28px;
+
+    letter-spacing: 3px;
+
+    font-weight: 900;
+}
+
+.game-over-text {
+    margin-bottom: 8px;
+
+    font-size: 13px;
+
+    line-height: 1.45;
+
+    color: #8fa4c7;
+}
+
+.game-over-card .menu-button {
+    height: 52px;
 }
 
 @keyframes confetti-fall {
