@@ -1,4 +1,9 @@
 
+import {
+    levelData,
+    levels,
+    TOTAL_LEVELS
+} from "./levels.js";
 document.addEventListener("DOMContentLoaded", () => {
 
     // =========================
@@ -14,6 +19,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const levelScreen =
         document.getElementById("level-screen");
 
+    const gameScreen =
+        document.getElementById("game-screen");
+
 
     // =========================
     // SPLASH
@@ -27,19 +35,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // =========================
-    // BUTTONS
+    // HOME BUTTON
     // =========================
 
     const playButton =
         document.getElementById("play-btn");
 
+
+    // =========================
+    // LEVEL SCREEN
+    // =========================
+
     const levelBackButton =
         document.getElementById("level-back-btn");
-
-
-    // =========================
-    // LEVEL ELEMENTS
-    // =========================
 
     const levelsGrid =
         document.getElementById("levels-grid");
@@ -52,7 +60,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // =========================
-    // LOADING
+    // GAME SCREEN
+    // =========================
+
+    const gameBackButton =
+        document.getElementById("game-back-btn");
+
+    const gameSettingsButton =
+        document.getElementById("game-settings-btn");
+
+    const levelSelectButton =
+        document.getElementById("level-select-btn");
+
+    const hintButton =
+        document.getElementById("hint-btn");
+
+    const currentLevelNumber =
+        document.getElementById("current-level-number");
+
+
+    // =========================
+    // GAME STATE
+    // =========================
+
+    let currentLevel = 1;
+
+
+    // =========================
+    // SPLASH LOADING
     // =========================
 
     let progress = 0;
@@ -125,7 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // =========================
-    // BACK
+    // LEVEL SCREEN BACK
     // =========================
 
     levelBackButton.addEventListener("click", () => {
@@ -133,6 +168,59 @@ document.addEventListener("DOMContentLoaded", () => {
         showScreen(homeScreen);
 
     });
+
+
+    // =========================
+    // GAME BACK
+    // =========================
+
+    gameBackButton.addEventListener("click", () => {
+
+        showScreen(levelScreen);
+
+    });
+
+
+    // =========================
+    // LEVEL SELECTION BUTTON
+    // =========================
+
+    levelSelectButton.addEventListener(
+        "click",
+        () => {
+
+            showLevelScreen();
+
+        }
+    );
+
+
+    // =========================
+    // SETTINGS
+    // =========================
+
+    gameSettingsButton.addEventListener(
+        "click",
+        () => {
+
+            console.log("Game settings clicked");
+
+        }
+    );
+
+
+    // =========================
+    // HINT
+    // =========================
+
+    hintButton.addEventListener(
+        "click",
+        () => {
+
+            console.log("Hint clicked");
+
+        }
+    );
 
 
     // =========================
@@ -310,22 +398,169 @@ document.addEventListener("DOMContentLoaded", () => {
     // SELECT LEVEL
     // =========================
 
+    // =========================
+    // SELECT LEVEL
+    // =========================
+
     function selectLevel(levelId) {
 
-        console.log(
-            `Level ${levelId} selected`
-        );
+        currentLevel = levelId;
 
+        currentLevelNumber.textContent =
+            levelId;
 
-        // Actual game screen
-        // will be added next.
+        showGameBoard(levelId);
 
-
-        alert(
-            `Level ${levelId} selected!`
-        );
+        showScreen(gameScreen);
 
     }
+
+
+    // =========================
+    // CREATE GAME BOARD
+    // =========================
+
+    function showGameBoard(levelId) {
+
+        const board =
+            document.getElementById("puzzle-board");
+
+
+        const data =
+            levelData[levelId];
+
+
+        if (!data) {
+
+            console.error(
+                `Level ${levelId} does not exist yet.`
+            );
+
+            return;
+
+        }
+
+
+        // Clear previous board
+
+        board.innerHTML = "";
+
+
+        // Set grid size
+
+        board.style.gridTemplateColumns =
+            `repeat(${data.gridSize}, 1fr)`;
+
+        board.style.gridTemplateRows =
+            `repeat(${data.gridSize}, 1fr)`;
+
+
+        // =========================
+        // CREATE CELLS
+        // =========================
+
+        for (
+            let row = 0;
+            row < data.gridSize;
+            row++
+        ) {
+
+            for (
+                let col = 0;
+                col < data.gridSize;
+                col++
+            ) {
+
+                const cell =
+                    document.createElement("div");
+
+
+                cell.className =
+                    "puzzle-cell";
+
+
+                cell.dataset.row = row;
+                cell.dataset.col = col;
+
+
+                // Check whether
+                // an arrow belongs here
+
+                const arrow =
+                    data.arrows.find(
+                        item =>
+                            item.row === row &&
+                            item.col === col
+                    );
+
+
+                if (arrow) {
+
+                    createArrow(
+                        cell,
+                        arrow.direction
+                    );
+
+                }
+
+
+                board.appendChild(cell);
+
+            }
+
+        }
+
+
+        // Update arrow counter
+
+        updateArrowCounter(data.arrows.length);
+
+    }
+
+
+    // =========================
+    // CREATE ARROW
+    // =========================
+
+    function createArrow(
+        cell,
+        direction
+    ) {
+
+        const arrow =
+            document.createElement("div");
+
+
+        arrow.className =
+            `board-arrow ${direction}`;
+
+
+        arrow.dataset.direction =
+            direction;
+
+
+        cell.appendChild(arrow);
+
+    }
+
+
+    // =========================
+    // UPDATE ARROW COUNTER
+    // =========================
+
+    function updateArrowCounter(count) {
+
+        const counter =
+            document.getElementById(
+                "arrow-count"
+            );
+
+
+        counter.textContent = count;
+
+    }
+
+
 
 });
 
