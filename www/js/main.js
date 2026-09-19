@@ -4,6 +4,7 @@ import {
     levels,
     TOTAL_LEVELS
 } from "./levels.js";
+import { startGame } from "./game.js";
 document.addEventListener("DOMContentLoaded", () => {
 
     // =========================
@@ -404,16 +405,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function selectLevel(levelId) {
 
-        currentLevel = levelId;
+    currentLevel = levelId;
 
-        currentLevelNumber.textContent =
-            levelId;
+    currentLevelNumber.textContent =
+        levelId;
 
-        showGameBoard(levelId);
 
-        showScreen(gameScreen);
+    startGame(levelId);
 
-    }
+
+    showScreen(gameScreen);
+
+}
 
 
     // =========================

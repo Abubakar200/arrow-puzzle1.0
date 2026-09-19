@@ -998,12 +998,31 @@ body {
 }
 
 
+
+
 /* =========================
    PUZZLE BOARD
 ========================= */
 
+.puzzle-area {
+    flex: 1;
+
+    position: relative;
+
+    min-height: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 8px;
+}
+
+
 .puzzle-board {
-    width: min(88vw, 390px);
+
+    width: min(94vw, 430px);
 
     aspect-ratio: 1 / 1;
 
@@ -1012,19 +1031,28 @@ body {
     grid-template-columns: repeat(5, 1fr);
     grid-template-rows: repeat(5, 1fr);
 
-    gap: 5px;
+    /*
+       Almost no gap between arrows
+    */
 
-    padding: 7px;
+    gap: 0;
 
-    border-radius: 24px;
+    padding: 0;
 
-    background: rgba(255, 255, 255, 0.055);
+    background: transparent;
 
-    box-shadow:
-        0 15px 40px rgba(0, 0, 0, 0.25),
+    border: none;
 
-        inset 0 1px 0
-        rgba(255, 255, 255, 0.04);
+    box-shadow: none;
+
+    /*
+       IMPORTANT:
+       arrows cannot visually escape
+       the board.
+    */
+
+    overflow: hidden;
+
 }
 
 
@@ -1033,14 +1061,13 @@ body {
 ========================= */
 
 .puzzle-cell {
+
     position: relative;
 
     width: 100%;
     height: 100%;
 
-    border-radius: 10px;
-
-    background: rgba(255, 255, 255, 0.055);
+    background: transparent;
 
     display: flex;
 
@@ -1048,16 +1075,19 @@ body {
     justify-content: center;
 
     overflow: hidden;
+
 }
 
 
 /* =========================
-   ARROW
+   LONG SIMPLE ARROW
 ========================= */
 
 .board-arrow {
-    width: 72%;
-    height: 72%;
+
+    width: 100%;
+
+    height: 100%;
 
     position: relative;
 
@@ -1070,123 +1100,218 @@ body {
 
     user-select: none;
 
-    transition:
-        transform 0.15s ease;
+    touch-action: manipulation;
+
+    /*
+       Important for smooth movement
+    */
+
+    will-change: transform;
+
 }
 
 
-/* Arrow body */
+/* =========================
+   ARROW SHAFT
+========================= */
 
 .board-arrow::before {
+
     content: "";
 
     position: absolute;
 
-    width: 28%;
+    width: 3px;
 
-    height: 72%;
+    /*
+       LONG ARROW
+    */
 
-    border-radius: 5px;
+    height: 92%;
 
-    background: white;
+    background: #ffffff;
+
+    border-radius: 2px;
 
     left: 50%;
+
     top: 50%;
 
     transform:
         translate(-50%, -50%);
+
 }
 
 
-/* Arrow head */
+/* =========================
+   ARROW HEAD
+========================= */
 
 .board-arrow::after {
+
     content: "";
 
     position: absolute;
 
-    width: 0;
-    height: 0;
+    width: 16px;
 
-    border-left: 18px solid transparent;
-    border-right: 18px solid transparent;
-    border-bottom: 28px solid white;
+    height: 16px;
+
+    border-top:
+        3px solid #ffffff;
+
+    border-right:
+        3px solid #ffffff;
 
     left: 50%;
-    top: 8px;
+
+    top: 3%;
 
     transform:
-        translateX(-50%);
+        translateX(-50%)
+        rotate(-45deg);
+
 }
 
 
 /* =========================
-   ARROW DIRECTIONS
+   DIRECTIONS
 ========================= */
 
+.board-arrow.up {
+
+    transform:
+        rotate(0deg);
+
+}
+
 .board-arrow.right {
-    transform: rotate(90deg);
+
+    transform:
+        rotate(90deg);
+
 }
 
 .board-arrow.down {
-    transform: rotate(180deg);
+
+    transform:
+        rotate(180deg);
+
 }
 
 .board-arrow.left {
-    transform: rotate(270deg);
-}
 
-.board-arrow.up {
-    transform: rotate(0deg);
+    transform:
+        rotate(270deg);
+
 }
 
 
 /* =========================
-   ARROW PRESS
+   SMALL PHONES
+========================= */
+
+@media (max-width: 340px) {
+
+    .puzzle-board {
+
+        width: 96vw;
+
+    }
+
+    .board-arrow::before {
+
+        width: 2px;
+
+    }
+
+    .board-arrow::after {
+
+        width: 13px;
+        height: 13px;
+
+        border-top-width: 2px;
+        border-right-width: 2px;
+
+    }
+
+}
+
+/* =========================
+   PRESS EFFECT
 ========================= */
 
 .board-arrow:active {
-    transform: scale(0.90);
+    transform: scale(0.88);
 }
 
 .board-arrow.right:active {
-    transform: rotate(90deg) scale(0.90);
+    transform: rotate(90deg) scale(0.88);
 }
 
 .board-arrow.down:active {
-    transform: rotate(180deg) scale(0.90);
+    transform: rotate(180deg) scale(0.88);
 }
 
 .board-arrow.left:active {
-    transform: rotate(270deg) scale(0.90);
+    transform: rotate(270deg) scale(0.88);
 }
 
 
 /* =========================
-   BOARD RESPONSIVE
+   SMALL PHONES
 ========================= */
 
 @media (max-width: 340px) {
 
     .puzzle-board {
         width: 90vw;
-
-        gap: 4px;
-
-        padding: 5px;
-
-        border-radius: 18px;
     }
 
-    .puzzle-cell {
-        border-radius: 7px;
+    .board-arrow {
+        width: 40px;
+        height: 40px;
+    }
+
+    .board-arrow::before {
+        width: 2px;
+        height: 25px;
     }
 
     .board-arrow::after {
-        border-left-width: 14px;
-        border-right-width: 14px;
-        border-bottom-width: 22px;
+        width: 10px;
+        height: 10px;
+
+        border-top-width: 2px;
+        border-right-width: 2px;
     }
 
 }
+/* =========================
+   BLOCKED ARROW
+========================= */
 
+.board-arrow.arrow-blocked {
+    animation: arrowBlocked 0.3s ease;
+}
+
+
+@keyframes arrowBlocked {
+
+    0% {
+        opacity: 1;
+    }
+
+    30% {
+        opacity: 0.45;
+    }
+
+    60% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 1;
+    }
+
+}
