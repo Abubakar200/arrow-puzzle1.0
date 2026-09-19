@@ -1,0 +1,743 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    background: #10131c;
+}
+
+
+/* =========================
+   COMMON SCREEN
+========================= */
+
+.screen {
+    position: fixed;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    display: none;
+
+    overflow: hidden;
+}
+
+.screen.active {
+    display: flex;
+}
+
+
+/* =========================
+   SPLASH SCREEN
+========================= */
+
+#splash-screen {
+    background:
+        radial-gradient(
+            circle at center,
+            #29324a 0%,
+            #171c2a 45%,
+            #0d1018 100%
+        );
+
+    justify-content: center;
+    align-items: center;
+
+    color: white;
+}
+
+.splash-content {
+    width: min(80%, 350px);
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+}
+
+
+/* =========================
+   LOGO
+========================= */
+
+.game-logo {
+    text-align: center;
+
+    margin-bottom: 80px;
+
+    animation: logoAppear 0.8s ease-out;
+}
+
+.logo-arrow {
+    width: 100px;
+    height: 100px;
+
+    margin: 0 auto 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 25px;
+
+    background: #ffffff;
+
+    color: #171c2a;
+
+    font-size: 58px;
+    font-weight: bold;
+
+    transform: rotate(-10deg);
+
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.game-logo h1,
+.home-logo h1 {
+    font-size: 42px;
+    line-height: 36px;
+
+    letter-spacing: 5px;
+
+    font-weight: 900;
+}
+
+.game-logo h2,
+.home-logo h2 {
+    font-size: 22px;
+
+    letter-spacing: 9px;
+
+    margin-left: 9px;
+
+    color: #8fa4c7;
+}
+
+
+/* =========================
+   LOADING BAR
+========================= */
+
+.loading-container {
+    width: 100%;
+
+    text-align: center;
+}
+
+.loading-bar {
+    width: 100%;
+    height: 10px;
+
+    overflow: hidden;
+
+    border-radius: 20px;
+
+    background: rgba(255, 255, 255, 0.12);
+
+    box-shadow:
+        inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+#loading-progress {
+    width: 0%;
+    height: 100%;
+
+    border-radius: inherit;
+
+    background: #ffffff;
+
+    transition: width 0.15s linear;
+}
+
+#loading-text {
+    margin-top: 12px;
+
+    font-size: 13px;
+
+    letter-spacing: 2px;
+
+    color: #9ba7bd;
+}
+
+
+/* =========================
+   VERSION
+========================= */
+
+.version {
+    position: absolute;
+
+    bottom: 20px;
+
+    left: 0;
+    right: 0;
+
+    text-align: center;
+
+    font-size: 11px;
+
+    color: rgba(255, 255, 255, 0.35);
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================
+   HOME SCREEN
+========================= */
+
+#home-screen {
+    background:
+        radial-gradient(
+            circle at 50% 35%,
+            #303b58 0%,
+            #171c2a 45%,
+            #0d1018 100%
+        );
+
+    justify-content: center;
+    align-items: center;
+
+    color: white;
+}
+
+.home-container {
+    width: min(85%, 380px);
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+}
+
+
+/* =========================
+   HOME LOGO
+========================= */
+
+.home-logo {
+    text-align: center;
+
+    margin-bottom: 70px;
+
+    animation: homeLogoAppear 0.5s ease-out;
+}
+
+.home-arrow {
+    width: 90px;
+    height: 90px;
+
+    margin: 0 auto 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: white;
+
+    color: #171c2a;
+
+    border-radius: 22px;
+
+    font-size: 52px;
+
+    transform: rotate(-10deg);
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+
+/* =========================
+   MENU
+========================= */
+
+.home-menu {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 15px;
+}
+
+.menu-button {
+    width: 100%;
+
+    height: 62px;
+
+    border: none;
+
+    border-radius: 18px;
+
+    background: rgba(255, 255, 255, 0.10);
+
+    color: white;
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 6px 15px rgba(0, 0, 0, 0.2);
+
+    transition:
+        transform 0.15s ease,
+        background 0.15s ease;
+}
+
+.menu-button span {
+    margin-right: 10px;
+}
+
+.menu-button:active {
+    transform: scale(0.96);
+}
+
+.menu-button:hover {
+    background: rgba(255, 255, 255, 0.16);
+}
+
+
+/* PLAY BUTTON */
+
+.play-button {
+    background: white;
+
+    color: #171c2a;
+
+    font-size: 19px;
+
+    box-shadow:
+        0 8px 25px rgba(255, 255, 255, 0.12);
+}
+
+.play-button:hover {
+    background: #f0f2f7;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+.home-footer {
+    margin-top: 45px;
+
+    color: rgba(255, 255, 255, 0.4);
+
+    font-size: 12px;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes logoAppear {
+
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+}
+
+@keyframes homeLogoAppear {
+
+    from {
+        opacity: 0;
+        transform: scale(0.85);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-height: 600px) {
+
+    .game-logo {
+        margin-bottom: 45px;
+    }
+
+    .home-logo {
+        margin-bottom: 40px;
+    }
+
+    .logo-arrow,
+    .home-arrow {
+        width: 70px;
+        height: 70px;
+
+        font-size: 40px;
+    }
+
+    .game-logo h1,
+    .home-logo h1 {
+        font-size: 32px;
+    }
+
+    .game-logo h2,
+    .home-logo h2 {
+        font-size: 17px;
+    }
+
+}
+
+/* =========================
+   LEVEL SELECTION SCREEN
+========================= */
+
+#level-screen {
+    background:
+        radial-gradient(
+            circle at 50% 20%,
+            #303b58 0%,
+            #171c2a 45%,
+            #0d1018 100%
+        );
+
+    color: white;
+
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* =========================
+   CONTAINER
+========================= */
+
+.level-container {
+    width: min(92%, 430px);
+
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 20px 0;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.level-header {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns: 50px 1fr 50px;
+
+    align-items: center;
+
+    margin-bottom: 25px;
+}
+
+.level-title {
+    text-align: center;
+}
+
+.level-title span {
+    font-size: 17px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+}
+
+
+/* =========================
+   BACK BUTTON
+========================= */
+
+.back-button {
+    width: 44px;
+    height: 44px;
+
+    border: none;
+
+    border-radius: 14px;
+
+    background: rgba(255, 255, 255, 0.10);
+
+    color: white;
+
+    font-size: 25px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.15s ease,
+        background 0.15s ease;
+}
+
+.back-button:active {
+    transform: scale(0.9);
+}
+
+.back-button:hover {
+    background: rgba(255, 255, 255, 0.16);
+}
+
+
+/* =========================
+   PROGRESS
+========================= */
+
+.level-progress {
+    width: 100%;
+
+    margin-bottom: 25px;
+}
+
+.progress-text {
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-bottom: 9px;
+
+    font-size: 11px;
+
+    letter-spacing: 1px;
+
+    color: #9ba7bd;
+}
+
+#level-progress-text {
+    color: white;
+
+    font-weight: bold;
+}
+
+.progress-track {
+    width: 100%;
+
+    height: 7px;
+
+    border-radius: 20px;
+
+    background: rgba(255, 255, 255, 0.10);
+
+    overflow: hidden;
+}
+
+.progress-fill {
+    width: 2%;
+
+    height: 100%;
+
+    border-radius: inherit;
+
+    background: white;
+
+    transition: width 0.3s ease;
+}
+
+
+/* =========================
+   LEVEL GRID
+========================= */
+
+.levels-grid {
+    flex: 1;
+
+    overflow-y: auto;
+
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 14px;
+
+    padding: 5px 4px 30px;
+
+    scrollbar-width: none;
+}
+
+.levels-grid::-webkit-scrollbar {
+    display: none;
+}
+
+
+/* =========================
+   LEVEL BUTTON
+========================= */
+
+.level-button {
+    aspect-ratio: 1 / 1;
+
+    border: none;
+
+    border-radius: 18px;
+
+    background: rgba(255, 255, 255, 0.08);
+
+    color: white;
+
+    cursor: pointer;
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-direction: column;
+
+    font-weight: bold;
+
+    box-shadow:
+        0 5px 15px rgba(0, 0, 0, 0.15);
+
+    transition:
+        transform 0.15s ease,
+        background 0.15s ease;
+}
+
+
+/* Unlocked */
+
+.level-button.unlocked {
+    background: rgba(255, 255, 255, 0.14);
+}
+
+.level-button.unlocked:hover {
+    background: rgba(255, 255, 255, 0.20);
+}
+
+.level-button.unlocked:active {
+    transform: scale(0.92);
+}
+
+
+/* Level Number */
+
+.level-number {
+    font-size: 22px;
+
+    line-height: 1;
+}
+
+
+/* Small LEVEL text */
+
+.level-label {
+    margin-top: 5px;
+
+    font-size: 8px;
+
+    letter-spacing: 1px;
+
+    color: #9ba7bd;
+}
+
+
+/* =========================
+   LOCKED LEVEL
+========================= */
+
+.level-button.locked {
+    opacity: 0.45;
+
+    cursor: not-allowed;
+}
+
+.lock-icon {
+    font-size: 17px;
+
+    margin-bottom: 5px;
+}
+
+.locked .level-number {
+    font-size: 13px;
+
+    color: #8b94a6;
+}
+
+
+/* =========================
+   COMPLETED LEVEL
+========================= */
+
+.level-button.completed {
+    background: rgba(255, 255, 255, 0.20);
+}
+
+.completed-star {
+    position: absolute;
+
+    top: 7px;
+    right: 9px;
+
+    font-size: 12px;
+}
+
+
+/* =========================
+   SMALL PHONES
+========================= */
+
+@media (max-width: 340px) {
+
+    .levels-grid {
+        grid-template-columns: repeat(3, 1fr);
+
+        gap: 12px;
+    }
+
+}
+
+
+/* =========================
+   LARGE PHONES
+========================= */
+
+@media (min-width: 500px) {
+
+    .levels-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+}
+
+
+

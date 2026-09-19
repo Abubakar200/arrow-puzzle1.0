@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">arrow-puzzle</string>
+    <string name="title_activity_main">arrow-puzzle</string>
+    <string name="package_name">com.gamearena.arrowpuzzle</string>
+    <string name="custom_url_scheme">com.gamearena.arrowpuzzle</string>
+</resources>
